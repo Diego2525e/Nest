@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Body, HttpStatus, Param, NotFoundException, Post } from '@nestjs/common';
+import { Controller, Get, Res, Body, HttpStatus, Param, NotFoundException, Post, Delete, Patch } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { ApiUseTags, ApiImplicitParam } from '@nestjs/swagger';
 import { CreateBookDTO } from './dto/create-book.dto';
@@ -24,11 +24,26 @@ export class BooksController {
     }
 
     @Post('/create')
-    async addCustomer(@Res() res, @Body() createCustomerDTO: CreateBookDTO) {
-        const book = await this.booksService.addBook(createCustomerDTO);
+    async addBook(@Res() res, @Body() createBookDTO: CreateBookDTO) {
+        const book = await this.booksService.addBook(createBookDTO);
         return res.status(HttpStatus.OK).json({
             message: "Book has been created successfully",
             book
         })
+    }
+
+    @Patch('/:bookID')
+    @ApiImplicitParam({ name: 'bookID', type: 'string' })
+    async updateBook(@Res() res, @Param('bookID') bookID, @Body() updateBookDTO: CreateBookDTO)
+    {
+        const book = await this.booksService.updateBook(bookID, updateBookDTO);
+        return res.status(HttpStatus.OK).json(book);
+    }
+
+    @Delete('/:bookID')
+    @ApiImplicitParam({ name: 'bookID', type: 'string' })
+    async deleteBook(@Res() res, @Param('bookID') bookID){
+        const book = await this.booksService.deleteBook(bookID);
+        return res.status(HttpStatus.OK).json(book);
     }
 }

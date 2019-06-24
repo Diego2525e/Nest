@@ -21,7 +21,7 @@ export class BooksService {
         return newBook.save() 
     }
     async updateBook(bookID, createBookDTO:CreateBookDTO):Promise<Book>{
-        const updateBook = await this.bookModel.findByIdAndUpdate(bookID,createBookDTO,{new: true});
+        const updateBook = await this.bookModel.findOneAndUpdate(bookID,createBookDTO,{new: true});
         return updateBook;
     }
     async deleteBook(bookID):Promise<any>{
